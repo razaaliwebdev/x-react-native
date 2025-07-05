@@ -1,12 +1,18 @@
-import express from 'experss';
-import connectDB from './config/db';
+import express from 'express';
+import connectDB from './config/db.js';
+import dotenv from 'dotenv';
+import cors from "cors";
+
+dotenv.config();
 
 const app = express();
 
 
+
 // Middleware
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 
 // Routes 
@@ -17,10 +23,9 @@ app.get("/", (req, res) => {
 
 
 // Database connection
-connectDB(() => {
+connectDB().then(() => {
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
-        console.log(`Server is running on the PORT${PORT}`);
+        console.log(`Server is running on the PORT:${PORT}`);
     });
 });
-
