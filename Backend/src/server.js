@@ -1,7 +1,10 @@
 import express from 'express';
-import connectDB from './config/db.js';
-import dotenv from 'dotenv';
 import cors from "cors";
+import { clerkMiddleware } from '@clerk/express';
+import userRoutes from './routes/useRoute.js';
+
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
 
 dotenv.config();
 
@@ -10,15 +13,18 @@ const app = express();
 
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(clerkMiddleware());
 
 
 // Routes 
 app.get("/", (req, res) => {
     res.send("<h1>API Working Fine...</h1>");
 });
+
+app.use("/api/users", userRoutes);
 
 
 
